@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Description" content="3DWriter">
+  <title>3DWriter</title>
+ </head>
+ <body> 
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<script src="//code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+ <link rel="stylesheet" href="/css/3dwriter.css">
+ <script src="hershey.h.js" dcrossorigin="anonymous"></script>
+  <div style="display:none;" id="tb_stash">
+		<div class="text_block dib" style="width:100%; gff:570px;position:relative; padding:4px;">
+			<div class="my_btn font_selection" title="Font" onclick="tb_conf(this, 'font')">
+				<i class="fas fa-font"></i>
+				<div class="content" data-val="scripts">scripts</div>
+			</div>
+			<div class="my_btn font-size" title="Font size" onclick="tb_conf(this, 'size')">
+				<i class="fas fa-text-height"></i>
+				<div class="content" data-val="12">12mm</div>
+			</div>
+			<div class="my_btn" title="Align left" onclick="tb_conf(this, 'left')">
+				<i class="fas fa-align-left"></i>
+			</div><div class="my_btn" title="Align center" style="margin-left: -1px;" onclick="tb_conf(this, 'center')">
+				<i class="fas fa-align-center"></i>
+			</div><div class="my_btn" title="Align right" style="margin-left: -1px;" onclick="tb_conf(this, 'right')">
+				<i class="fas fa-align-right"></i>
+			</div>
+			<div class="my_btn letter_Spacing" title="Letter spacing" onclick="tb_conf(this, 'letspac')">
+				<img src="/images/3dwriter/letter_spacing.png" style="height:16px;width:16px;">
+				<div class="content" data-val="0">0 mm</div>
+			</div>
+			<div class="my_btn line_spacing" title="Line spacing" onclick="tb_conf(this, 'linspac')">
+				<img src="/images/3dwriter/line_spacing.png" style="height:16px;width:16px;">
+				<div class="content" data-val="0">0 mm</div>
+			</div>
+			<div class="my_btn line_angle" title="Text rotation" onclick="tb_conf(this, 'linang')">
+				<img src="/images/3dwriter/angle.png" style="height:16px;width:16px;">
+				<div class="content" data-val="0">0 deg</div>
+			</div>
+			<div style="width:55px;" class="txt_x_div adv_ctrl" >
+				X<small> mm</small><br>
+				<input type="text" class="txt_x" size=3 value="1" onkeyup="render_preview()">
+			</div>
+			<div style="width:55px;" class="txt_y_div adv_ctrl">
+				Y<small> mm</small><br>
+				<input type="text" class="txt_y" size=3 value="0" onkeyup="render_preview()">
+			</div>
+			<div  class="dib my_btn" style="position:absolute;right:5px;top:3px;background-color:white;" onclick="text_block_remove(this);">
+				<Span class="fa fa-times dib" style="cursor:pointer;color:red;width:18px; height:18px;line-height:18px;text-align:center;"></span><br>
+			</div>
+			<br>
+			<div class="txt_txt_div dib" style="width:100%;margin-top:2px;">
+				<textarea class="txt_txt" rows="" cols="" placeholder="Write your text here" style="width:100%;height:80px;" onkeyup="render_preview()"></textarea>
+			</div>
+			<input type="text" id="txt_user_font_data" hidden>
+			<input type="text" id="txt_block_width" hidden>
+			<input type="text" id="txt_block_height" hidden>
+		</div>
+	</div>
+	<section class="content_section main_app">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="panel-group" id="accordion">
+						<div class = "panel panel-default">
+							<div class = "panel-heading"><br>
+								<h4 class="panel-title">
+									<a data-toggle="collapse" class="accordion-toggle btn btn-primary" href="#harware_setup" style="text-decoration:none;padding:4px;">Hardware setup</a>
+								</h4>
+							</div>
+							<div id="harware_setup" class="panel-collapse collapse">
+								<form id="harware_setup_form">
+								<table>
+									<tr>
+										<td width=110><label>Bed</label></td>
+										<td>X <small>mm</small></td>
+										<td>Y <small>mm</small></td>
+									</tr>
+									<tr>
+										<td></td>
+										<td><input type="text" id="set_bed_x" size=3 value="235" onchange="render_preview()"></td>
+										<td><input type="text" id="set_bed_y" size=3 value="235" onchange="render_preview()"></td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td width=110><label>Pen offset</label></td>
+										<td>X <small>mm</small></td>
+										<td>Y <small>mm</small></td>
+									</tr>
+									<tr>
+										<td></td>
+										<td><input type="text" id="set_pen_offset_x" size=3 value="0" onchange="render_preview()"></td>
+										<td><input type="text" id="set_pen_offset_y" size=3 value="30" onchange="render_preview()"></td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td width=110><label>Pen</label></td>
+										<td>Up <small>mm</small></td>
+										<td>Down <small>mm</small></td>
+									</tr>
+									<tr>
+										<td></td>
+										<td><input type="text" id="set_pen_up" size=3 value="15" onchange="render_preview()"></td>
+										<td><input type="text" id="set_pen_down" size=3 value="13.2" onchange="render_preview()"></td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td width=110><label>Travel speed</label></td>
+										<td><input type="text" id="set_travel_speed" size=4 value="100" onchange="render_preview()"></td>
+										<td><small>mm/sec</small></td>
+									</tr>
+									<tr>
+										<td><label>Draw speed</label></td>
+										<td><input type="text" id="set_draw_speed" size=4 value="30" onchange="render_preview()"></td>
+										<td><small>mm/sec</small></td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td width=110><label>Home</label></td>
+										<td><input type="checkbox" id="set_home_x" checked value="on" onchange="render_preview()">&nbsp;X</td>
+										<td><input type="checkbox" id="set_home_y" checked value="on" onchange="render_preview()">&nbsp;Y</td>
+										<td><input type="checkbox" id="set_home_z" checked value="on" onchange="render_preview()">&nbsp;Z</td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td width=110><label>Dry Run</label></td>
+										<td colspan=3><input type="checkbox" id="set_dry_run" value="on" onchange="render_preview()">&nbsp;<Small>Pen stays up</small></td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td width=110><label>Advanced</label></td>
+										<td colspan=3><input type="checkbox" id="set_adv_mode" value="on" onchange="set_adv(this.checked);render_preview()">&nbsp;<Small>show more options</small></td>
+									</tr>
+								</table>
+								</form>
+							</div>
+						</div>
+					</div>
+					<h4 class = "panel-title"  style="text-decoration:none;padding:4px; color:#333;margin-top:20px;">
+						<input type="button" value=" Add a text block " onclick="new_text_block()" class="btn btn-success btn-sm" style="float:right;">
+						Your text
+					</h4>
+					<div class="text_blocks"></div>
+					<br>
+					<br>
+					Notes<br>
+					<small><i>5/06/2019: Text rotation is a little buggy and has been limited to 10 degrees.</i></small>
+				</div>
+				<div class="col-lg-8" style="border-left:1px solid #ccc;">
+					<div class="row" style="width:100%;max-width:800px;">
+						<div class="col-md-4 preview_controls" style="line-height: 60px;">
+							<span  style="font-size:16pt; font-weight:500;line-height: 60px;text-decoration:none;color:#333;padding-left:22px;">Drawing preview</h4>
+						</div>
+						<div class="col-md-3" style="line-height: 60px;font-size:13pt;">
+							<div class="scale">
+								Scale:&nbsp;<select id="set_preview_scale" onchange="setting_update(this);">
+									<option value="1">1x</option>
+									<option value="2">2x</option>
+									<option value="3" selected>3x</option>
+									<option value="4">4x</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-2" style="line-height: 60px;padding-top:5px;text-align:center;">
+							<!-- i class="fas fa-file-upload" style="font-size:16pt;cursor:pointer;" title="Load background image"></i -->
+						</div>
+						<div class="col-md-3 render_controls" style="line-height:60px;">
+							<input type="button" value=" Download GCode " onclick="render_gcode()" class="btn btn-warning" style="margin-right:45px;">
+						</div>
+					</div>
+					<div class="canvas_div">
+						<div class="dib" style="padding-left:20px;padding-bottom:20px;position:relative;">
+							<div class="ui_origin_x"></div><div class="ui_origin_y"></div><div class="ui_x-axis">X axis&nbsp;&nbsp;&nbsp;<span class="fa fa-arrow-right"></span></div><div class="ui_y-axis">Y axis&nbsp;&nbsp;&nbsp;<span class="fa fa-arrow-right"></span></div>
+							<canvas class="grid" id="preview_canvas"></canvas>
+						</div>
+						<div class="oob_text"><strong>Warning:</strong> Pen went outside of print area</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<input type="file" id="project_upload_input" onchange="handle_upload(this.files)" style="display:none;" accept=".3dw">
+	<input type="file" id="imageLoader" name="imageLoader" style="display:none;">
+		<div class=" option_font" style="background-color:white !important">
+			<div class="font_menu"></div>
+		</div>
+		<div class="option_box option_size">
+			<div class="option_size_opt opt_5" onclick="tb_conf_click(this, 'size', 5);">5 mm</div>
+			<div class="option_size_opt opt_6" onclick="tb_conf_click(this, 'size', 6);">6 mm</div>
+			<div class="option_size_opt opt_7" onclick="tb_conf_click(this, 'size', 7);">7 mm</div>
+			<div class="option_size_opt opt_8" onclick="tb_conf_click(this, 'size', 8);">8 mm</div>
+			<div class="option_size_opt opt_10" onclick="tb_conf_click(this, 'size', 10);">10 mm</div>
+			<div class="option_size_opt opt_12" onclick="tb_conf_click(this, 'size', 12);">12 mm</div>
+			<div class="option_size_opt opt_14" onclick="tb_conf_click(this, 'size', 14);">14 mm</div>
+			<div class="option_size_opt opt_16" onclick="tb_conf_click(this, 'size', 16);">16 mm</div>
+			<div class="option_size_opt opt_18" onclick="tb_conf_click(this, 'size', 18);">18 mm</div>
+			<div class="option_size_opt opt_20" onclick="tb_conf_click(this, 'size', 20);">20 mm</div>
+			<div class="option_size_opt opt_22" onclick="tb_conf_click(this, 'size', 22);">22 mm</div>
+			<div class="option_size_opt opt_30" onclick="tb_conf_click(this, 'size', 30);">30 mm</div>
+		</div>
+		<div class="option_box option_letspac" style="padding:5px;">
+			<input type="text" class="option_letspac_txt" value="0" size=3 onkeydown="tb_conf_key(event, this);">&nbsp;mm&nbsp;&nbsp;<input type="button" value=" OK " onclick="tb_conf_click(this, 'letspac', this.value)" class="btn btn-xs btn-info">
+		</div>
+		<div class="option_box option_linspac" style="padding:5px;">
+			<input type="text" class="option_linspac_txt" value="0" size=3 onkeydown="tb_conf_key(event, this);">&nbsp;mm&nbsp;&nbsp;<input type="button" value=" OK " onclick="tb_conf_click(this, 'linspac', this.value)" class="btn btn-xs btn-info">
+		</div>
+
+		<div class="option_box option_linang" style="padding:5px;">
+			<input type="text" class="option_linang_txt" value="0" size=3 onkeydown="tb_conf_key(event, this);">&nbsp;deg&nbsp;&nbsp;<input type="button" value=" OK " onclick="tb_conf_click(this, 'linang', this.value)" class="btn btn-xs btn-info">
+		</div>
+		<div class="modal fade" id="fontabout">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Fonts</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p>The fonts used in the project are a derivitive of the <a href="https://en.wikipedia.org/wiki/Hershey_fonts" target="_BLANK">HERSHEY fonts</a>.</p>
+						<p>
+							These are NOT regular font files, Other fonts like the ones your computer use will not work here.<br>The original files are almost cryptic in nature and impossible to work with.<br>
+							<div class="dib dark">
+								<div style="padding:2px;">&nbsp;The Hershey file format...for example</div>
+								<img src="/images/3dwriter/hershey_format.png" style="margin:2px;padding:3px;">
+							</div><br>
+							So i have converted them to an easier structure for use here.<br>
+						</p>
+						<p>
+							All of the original Hershey fonts are available for use.
+						</p>
+						<p>
+							<strong>Font editor</strong><br>
+							<font color=red>28-05-2019 This is a work in progress</font><br>
+							Please check back here or on github for up to date information</font><br>
+							When the font editor is complete you can sign in using a google account and will be able to create & edit fonts as well as choose other user generated fonts that they have allowed for use.<br>
+							<br>
+							Until this <font color=red>RED</font> message above goes away, using the font editor will likely be a dissapointing adventure.<br>
+							<br>
+							The font editor is a complex bit of code and until i'm satisfied that you will be able to use it reliably and not lose your work i suggest avoiding it.
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="about">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">About 3D Writer</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p>This website enables you to create written pages of text using your 3D Printer just by strapping a pen to it.</p>
+						<p>The easiest way to attach a pen is by using a few rubber bands. Perhaps printing a <A href="https://www.thingiverse.com/thing:2044609" target="_BLANK">pen holder</a> attachment would be appropriate</p>
+						<p><strong>Note:</strong>&nbsp;The GCode files generated by this site have only been tested on a Tevo Flash which is a cartesian style printer (Like the Prusa or Creality CR-10). If you have a delta please let me know if this works for you (perhaps there is an issue with my origin not being centered).<br>
+						<b>Use at your own risk;</b> I am not to be held liable for damages incured during the use of this software, my recomendation is to use Pronterface to preview your 3DWriter GCode files prior to printing and keep you finger on the OFF switch for the first few prints.</p>
+						<p>
+							<img src="/images/3dwriter/youtube.png"><br>Here's some YouTube videos of the original software doing it's thing. This version is much the same except there's no program to download, just use it for whatever you want, whenever you like.<br>
+							Watch the original video from 2017 <a href="https://youtu.be/yK_YGwMRR40" target="_BLANK">Here on youTube</a><br>
+							The updated version that supports <a href="https://youtu.be/_dHTEbX50wU" target="_BLANK">laser engraving</a><br>
+							Or watch it write <a href="https://youtu.be/7aUX_X2yCqU" target="_BLANK">some xmas cards</a><br>
+						</p>
+						<p>
+							Original code on <A href="https://github.com/boy1dr/3DWriter" target="_BLANK">GitHub</a><br>
+							This right here is a brand new version of 3DWriter writen in HTML5/JavaScript.<br>It's free to use and always will be.
+						</p>
+						<p>
+							Check out my <a href="http://youtube.com.au/c/maken_it_so" target="_BLANK">YouTube channel</a> for lots of nerdy/fun projects.
+						</p>
+						<hr>
+						<strong>Privacy</strong><br>
+						This site does not need or use any of your personal details for any reason. The google login method used here provides only your email address and profile avatar for keeping your work private and making the menu bar look cool. No information is used for any purpose other than signing in to this site and using this software.
+						<hr>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="user_fonts">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">User fonts</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p>This feature is not yet ready for use<p>
+						<p>See "About fonts" for more information.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="font_editor">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Font editor</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p>This feature is not yet ready for use<p>
+						<p>See "About fonts" for more information.</p>
+						<p>If you came here from "About fonts", I told you this would be disappointing.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="help">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Help!</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/hTI48P-svIQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>
+						<p>
+							<strong>The short version</strong><br>
+							Be sure to check the settings in "hardware setup" to make sure they match your printer...especially the bed X & Y measurements.<br>
+							If you have an older/home made printer that doesn't go so fast reduce the travel & draw speeds.
+						</p>
+						<p>
+							Once your pen is attached to your printer, use its inbuilt move functions to find the appropriate pen up & down heights.
+						</p>
+						<strong>Writting text</strong><br>
+						<p>
+							Find the "Welcome to 3d Writer!" textbox on the left of the screen and write your text there.<br>
+							You can position your text by dragging it around in the preview window.<br>
+							<table>
+								<tr>
+									<td><strong>Font:</strong></td><td>The style of the written text. Choose from the "Simple fonts" section if you are not sure.</td>
+								</tr>
+								<tr>
+									<td><strong>Letter height:</strong></td><td>How big your written text will be, in millimeters.</td></tr>
+								</tr>
+								<tr>
+									<td><strong>Letter Spacing:&nbsp;&nbsp;</strong></td><td>How far apart the letters are.</td>
+								</tr>
+								<tr>
+									<td><strong>Line spacing:</strong></td><td>The gap between the lines. it's OK to use a negative number here.</td>
+								</tr>
+							</table>
+							<p>If you want more than 1 block of text, click the green "Add text block" button to add more.</p>
+							<p>
+								When you are hapy with the print preview, click the yellow "Download GCode" button and save it. Load the file in to your printer as you would normally and print it.<br>
+								I suggest having a piece of paper clipped to your printbed using binder clips (as seen in the videos on the About page).
+							</p>
+							<p>
+								<strong>Project Save/Open</strong><br>
+								You may save your current settings and text blocks by clicking File > Save.<br>
+								And open it up again by clicking File > Open<br>
+								<i>Note: This is a HTML5 application and does not use a server backend. Nothing you upload to this page leaves your computer</i>
+							</p>
+							<p>
+								<strong>Background image</strong>
+								<p>
+									If you are writing on a birthday card then you can take a photo of it on your printer bed and load it as a background in 3DWriter.<br>
+									This is so you can get all the text alignments right.
+								</p>
+								<p>The size of your background image must match your printers X & Y dimensions as pixels.</p>
+								<p>
+									For example...<br>
+									If you have a 200mm x 200mm print bed, the background image should be 200x200 pixels.<br>
+									The background image uses the scale value above the drawing preview.<br>
+									<i>Note: You are only uploading to this HTML page, the background image never leaves your computer.</i>
+								</p>
+							</p>
+							<p>
+								Please read the instructions on the Github page before making contact.
+							</p>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="3dwriter.js"></script>
+ </body>
+</html>
