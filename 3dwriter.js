@@ -640,6 +640,8 @@ function render_gcode(){
 	var g_set_home_y = $("#set_home_y").prop("checked");
 	var g_set_home_z = $("#set_home_z").prop("checked");
 	var g_set_dry_run = $("#set_dry_run").prop("checked");
+	var g_set_manual_positioning = $("#set_manual_positioning").prop("checked");
+	var g_set_manual_positioning_z = $("#set_manual_positioning_z").prop("checked");
 	var g_penup = $("#set_pen_up").val();
 	var g_pendown = $("#set_pen_down").val();
 	if (g_set_dry_run)	g_pendown = g_penup;
@@ -650,7 +652,8 @@ function render_gcode(){
 	if(g_set_home_x||g_set_home_y||g_set_home_y){
 		gcode_output+= "G28 "+(g_set_home_x?"X":"")+" "+(g_set_home_y?"Y":"")+" "+(g_set_home_z?"Z":"")+"\r\n";
 	}
-	gcode_output+= "G0 Z"+g_penup+" F"+g_travel_speed+"\r\n";	
+	if(g_set_manual_positioning)
+		gcode_output += addManualPositioning(g_set_manual_positioning_z, g_penup, g_travel_speed);
 	var lastpos = [];
 	var first_move = true;
 	gcode_output+= "G0 Z"+g_penup+" F"+g_travel_speed+"\r\n";
@@ -666,8 +669,35 @@ function render_gcode(){
 		first_move = false;
 	}
 	gcode_output+= "G0 Z"+g_penup+" F"+g_travel_speed+"\r\n";
+	if(g_set_manual_positioning)
+		gcode_output+= "G92.1 ;Restore Workspace\r\n";
 	gcode_output+= "G28 X\r\n";
 	download("3d_writer.gcode", gcode_output);
+
+}
+function addManualPositioning(ignore_z, pen_up, travel_speed) {
+	let gcode_init = ignore_z ? `G0 Z${pen_up} F${travel_speed} ;Move to offset setting height\r\n` : "";
+
+	const offset_all = "G92 X0 Y0 Z0 ;Workspace Offset\r\n";
+	const steppers_all = "M18 ;Disable Steppers\r\n";
+	let offset_xy = `G92 X0 Y0 Z${pen_up} ;Workspace Offset\r\n`;
+	const steppers_xy = "M18 X Y ;Disable X and Y Steppers (Z is fixed)\r\n";
+	
+	let choosen_offset = ignore_z ? offset_xy : offset_all;
+	let choosen_steppers = ignore_z ? steppers_xy : steppers_all;
+
+	let gcode = 
+	"G92.1 ;Clear previous offsets\r\n" +
+	gcode_init +
+	choosen_steppers +
+	"G4 P1000 ;Wait 1s to not have accidental double click\r\n" +
+	"M300 S440 P200 ;Beep\r\n" +
+	"M0 Set offset and click\r\n" +
+	"M17 ;Enable Steppers\r\n" +
+	"M428 ;Offset HERE\r\n" +
+	choosen_offset;
+
+	return gcode;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RENDER FUNCTIONS - END //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
