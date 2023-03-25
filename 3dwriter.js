@@ -36,7 +36,8 @@ function init_url(){
 	$("#set_home_y").prop( "checked", data.set_home_y==1 );
 	$("#set_home_z").prop( "checked", data.set_home_z==1 );
 	$("#set_dry_run").prop( "checked", data.set_dry_run==1 );
-	
+	$("#set_manual_positioning").prop("checked", data.set_manual_positioning==1 );
+	$("#set_manual_positioning_z").prop("checked", data.set_manual_positioning_z==1 );
 }
 function update_url(){
 	var fstate = {
@@ -52,6 +53,8 @@ function update_url(){
 		set_home_y: $("#set_home_y").prop("checked")?1:0,
 		set_home_z: $("#set_home_z").prop("checked")?1:0,
 		set_dry_run: $("#set_dry_run").prop("checked")?1:0,
+		set_manual_positioning: $("#set_manual_positioning").prop("checked")?1:0,
+		set_manual_positioning_z: $("#set_manual_positioning_z").prop("checked")?1:0,
 	};
 	var fstate = JSON.stringify(fstate); 
 	window.history.pushState('page2', '3DWriter', '?c='+fstate);
@@ -131,6 +134,8 @@ function handle_upload(file){
 		$("#set_home_y").prop("checked",project.set_home_y);
 		$("#set_home_z").prop("checked",project.set_home_z);
 		$("#set_dry_run").prop("checked",project.set_dry_run);
+		$("#set_manual_positioning").prop("checked", project.set_manual_positioning );
+		$("#set_manual_positioning_z").prop("checked", project.set_manual_positioning_z );
 		$("#set_pen_up").val(project.penup);
 		$("#set_pen_down").val(project.pendown);
 		$("#set_travel_speed").val(project.travel_speed);
@@ -163,6 +168,8 @@ function project_save(){
 	var g_set_home_y = $("#set_home_y").prop("checked");
 	var g_set_home_z = $("#set_home_z").prop("checked");
 	var g_set_dry_run = $("#set_dry_run").prop("checked");
+	var g_set_manual_positioning = $("#set_manual_positioning").prop("checked");
+	var g_set_manual_positioning_z = $("#set_manual_positioning_z").prop("checked");
 	var g_penup = $("#set_pen_up").val();
 	var g_pendown = $("#set_pen_down").val();
 	var g_travel_speed = $("#set_travel_speed").val();
@@ -196,6 +203,8 @@ function project_save(){
 		set_home_y: g_set_home_y,
 		set_home_z: g_set_home_z,
 		set_dry_run: g_set_dry_run,
+		set_manual_positioning: g_set_manual_positioning,
+		set_manual_positioning_z: g_set_manual_positioning_z,
 		penup: g_penup,
 		pendown: g_pendown,
 		travel_speed: g_travel_speed,
