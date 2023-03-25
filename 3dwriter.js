@@ -38,6 +38,8 @@ function init_url(){
 	$("#set_dry_run").prop( "checked", data.set_dry_run==1 );
 	$("#set_manual_positioning").prop("checked", data.set_manual_positioning==1 );
 	$("#set_manual_positioning_z").prop("checked", data.set_manual_positioning_z==1 );
+	if(data.set_manual_positioning)
+		$("#manual_positioning_z").addClass("show");
 }
 function update_url(){
 	var fstate = {
@@ -144,6 +146,8 @@ function handle_upload(file){
 		for(var tb in project.textblocks){
 			new_text_block(project.textblocks[tb].words , project.textblocks[tb].font_name, project.textblocks[tb].position_x, project.textblocks[tb].position_y , project.textblocks[tb].letter_spacing, project.textblocks[tb].line_spacing, project.textblocks[tb].height_mm);
 		}
+		if(project.set_manual_positioning)
+			$("#manual_positioning_z").addClass("show");
 	});
 }
 function readFileIntoMemory (file, callback) {
@@ -682,7 +686,7 @@ function render_gcode(){
 	}
 	gcode_output+= "G0 Z"+g_penup+" F"+g_travel_speed+"\r\n";
 	if(g_set_manual_positioning)
-		gcode_output+= "G92.1 ;Restore Workspace\r\n";
+		gcode_output+= "G53 ;Restore Workspace\r\n";
 	gcode_output+= "G28 X\r\n";
 	download("3d_writer.gcode", gcode_output);
 
