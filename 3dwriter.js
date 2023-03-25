@@ -699,19 +699,19 @@ function addManualPositioning(ignore_z, pen_up, travel_speed) {
 	let offset_xy = `G92 X0 Y0 Z${pen_up} ;Workspace Offset\r\n`;
 	const steppers_xy = "M18 X Y ;Disable X and Y Steppers (Z is fixed)\r\n";
 	
-	let choosen_offset = ignore_z ? offset_xy : offset_all;
-	let choosen_steppers = ignore_z ? steppers_xy : steppers_all;
+	let chosen_offset = ignore_z ? offset_xy : offset_all;
+	let chosen_steppers = ignore_z ? steppers_xy : steppers_all;
 
 	let gcode = 
 	"G92.1 ;Clear previous offsets\r\n" +
 	gcode_init +
-	choosen_steppers +
+	chosen_steppers +
 	"G4 P1000 ;Wait 1s to not have accidental double click\r\n" +
 	"M300 S440 P200 ;Beep\r\n" +
 	"M0 Set offset and click\r\n" +
 	"M17 ;Enable Steppers\r\n" +
 	"M428 ;Offset HERE\r\n" +
-	choosen_offset;
+	chosen_offset;
 
 	return gcode;
 }
