@@ -72,7 +72,7 @@
 	display:inline-block;
 	margin-left:60px;
 }
-.oob_text{
+.warning{
 	position:absolute; top:0px; left:20px; color:red;background-color:white;border:2px solid red;margin-top: -40px;padding:2px 10px 2px 10px;font-size:12pt;
 	display:none;
 }

@@ -386,7 +386,10 @@ function render_example(fname){
 // RENDER FUNCTIONS - START ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function out_of_bounds(){
-	$(".oob_text").show();
+	$("#oob_text").show();
+}
+function no_z_homing(){
+	$("#no_z_homing").show();
 }
 function fetch_character(fontname, symbol){
 	var characters = font[fontname][0];
@@ -459,8 +462,17 @@ function rotate(cx, cy, x, y, angle) {
 	ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
 	return [nx, ny];
 }
+function set_no_z_homing_warning(){
+	let shouldWarn = $("#set_manual_positioning_z").prop("checked") && !$("#set_home_z").prop("checked");
+	if(shouldWarn)
+		$("#no_z_homing").show();
+	else
+		$("#no_z_homing").hide();
+}
+
 function render_preview(){
-	$(".oob_text").hide();
+	$("#oob_text").hide();
+	set_no_z_homing_warning();
 	$(".tb_border").remove();
 	update_url();
 	var screen_scale = parseInt($("#set_preview_scale").val());
