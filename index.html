@@ -140,6 +140,16 @@
 								</table>
 								<table>
 									<tr>
+										<td width=110><label>Manual Positioning</label></td>
+										<td colspan=3><input href="#manual_positioning_z" data-toggle="collapse" type="checkbox" id="set_manual_positioning" value="on" onchange="render_preview()">&nbsp;<Small>Set the origin by manually moving the gantry before printing</small></td>
+									</tr>
+									<tr id="manual_positioning_z" class="collapse">
+										<td width=110><label>XY only</label></td>
+										<td colspan=3><input type="checkbox" id="set_manual_positioning_z" value="on" onchange="render_preview()">&nbsp;<Small>Z position is ignored (origin is equal to bed level)</small></td>
+									</tr>
+								</table>
+								<table>
+									<tr>
 										<td width=110><label>Advanced</label></td>
 										<td colspan=3><input type="checkbox" id="set_adv_mode" value="on" onchange="set_adv(this.checked);render_preview()">&nbsp;<Small>show more options</small></td>
 									</tr>
@@ -185,7 +195,8 @@
 							<div class="ui_origin_x"></div><div class="ui_origin_y"></div><div class="ui_x-axis">X axis&nbsp;&nbsp;&nbsp;<span class="fa fa-arrow-right"></span></div><div class="ui_y-axis">Y axis&nbsp;&nbsp;&nbsp;<span class="fa fa-arrow-right"></span></div>
 							<canvas class="grid" id="preview_canvas"></canvas>
 						</div>
-						<div class="oob_text"><strong>Warning:</strong> Pen went outside of print area</div>
+						<div id="oob_text" class="warning"><strong>Warning:</strong> Pen went outside of print area</div>
+						<div id="no_z_homing" class="warning"><strong>Warning:</strong> <br>Z Homing should be enabled for manual XY positioning to work properly!</div>
 					</div>
 				</div>
 			</div>

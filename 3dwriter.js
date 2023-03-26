@@ -36,7 +36,10 @@ function init_url(){
 	$("#set_home_y").prop( "checked", data.set_home_y==1 );
 	$("#set_home_z").prop( "checked", data.set_home_z==1 );
 	$("#set_dry_run").prop( "checked", data.set_dry_run==1 );
-	
+	$("#set_manual_positioning").prop("checked", data.set_manual_positioning==1 );
+	$("#set_manual_positioning_z").prop("checked", data.set_manual_positioning_z==1 );
+	if(data.set_manual_positioning)
+		$("#manual_positioning_z").addClass("show");
 }
 function update_url(){
 	var fstate = {
@@ -52,6 +55,8 @@ function update_url(){
 		set_home_y: $("#set_home_y").prop("checked")?1:0,
 		set_home_z: $("#set_home_z").prop("checked")?1:0,
 		set_dry_run: $("#set_dry_run").prop("checked")?1:0,
+		set_manual_positioning: $("#set_manual_positioning").prop("checked")?1:0,
+		set_manual_positioning_z: $("#set_manual_positioning_z").prop("checked")?1:0,
 	};
 	var fstate = JSON.stringify(fstate); 
 	window.history.pushState('page2', '3DWriter', '?c='+fstate);
@@ -131,6 +136,8 @@ function handle_upload(file){
 		$("#set_home_y").prop("checked",project.set_home_y);
 		$("#set_home_z").prop("checked",project.set_home_z);
 		$("#set_dry_run").prop("checked",project.set_dry_run);
+		$("#set_manual_positioning").prop("checked", project.set_manual_positioning );
+		$("#set_manual_positioning_z").prop("checked", project.set_manual_positioning_z );
 		$("#set_pen_up").val(project.penup);
 		$("#set_pen_down").val(project.pendown);
 		$("#set_travel_speed").val(project.travel_speed);
@@ -139,6 +146,8 @@ function handle_upload(file){
 		for(var tb in project.textblocks){
 			new_text_block(project.textblocks[tb].words , project.textblocks[tb].font_name, project.textblocks[tb].position_x, project.textblocks[tb].position_y , project.textblocks[tb].letter_spacing, project.textblocks[tb].line_spacing, project.textblocks[tb].height_mm);
 		}
+		if(project.set_manual_positioning)
+			$("#manual_positioning_z").addClass("show");
 	});
 }
 function readFileIntoMemory (file, callback) {
@@ -163,6 +172,8 @@ function project_save(){
 	var g_set_home_y = $("#set_home_y").prop("checked");
 	var g_set_home_z = $("#set_home_z").prop("checked");
 	var g_set_dry_run = $("#set_dry_run").prop("checked");
+	var g_set_manual_positioning = $("#set_manual_positioning").prop("checked");
+	var g_set_manual_positioning_z = $("#set_manual_positioning_z").prop("checked");
 	var g_penup = $("#set_pen_up").val();
 	var g_pendown = $("#set_pen_down").val();
 	var g_travel_speed = $("#set_travel_speed").val();
@@ -196,6 +207,8 @@ function project_save(){
 		set_home_y: g_set_home_y,
 		set_home_z: g_set_home_z,
 		set_dry_run: g_set_dry_run,
+		set_manual_positioning: g_set_manual_positioning,
+		set_manual_positioning_z: g_set_manual_positioning_z,
 		penup: g_penup,
 		pendown: g_pendown,
 		travel_speed: g_travel_speed,
@@ -377,7 +390,10 @@ function render_example(fname){
 // RENDER FUNCTIONS - START ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function out_of_bounds(){
-	$(".oob_text").show();
+	$("#oob_text").show();
+}
+function no_z_homing(){
+	$("#no_z_homing").show();
 }
 function fetch_character(fontname, symbol){
 	var characters = font[fontname][0];
@@ -450,8 +466,17 @@ function rotate(cx, cy, x, y, angle) {
 	ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
 	return [nx, ny];
 }
+function set_no_z_homing_warning(){
+	let shouldWarn = $("#set_manual_positioning_z").prop("checked") && !$("#set_home_z").prop("checked");
+	if(shouldWarn)
+		$("#no_z_homing").show();
+	else
+		$("#no_z_homing").hide();
+}
+
 function render_preview(){
-	$(".oob_text").hide();
+	$("#oob_text").hide();
+	set_no_z_homing_warning();
 	$(".tb_border").remove();
 	update_url();
 	var screen_scale = parseInt($("#set_preview_scale").val());
@@ -631,6 +656,8 @@ function render_gcode(){
 	var g_set_home_y = $("#set_home_y").prop("checked");
 	var g_set_home_z = $("#set_home_z").prop("checked");
 	var g_set_dry_run = $("#set_dry_run").prop("checked");
+	var g_set_manual_positioning = $("#set_manual_positioning").prop("checked");
+	var g_set_manual_positioning_z = $("#set_manual_positioning_z").prop("checked");
 	var g_penup = $("#set_pen_up").val();
 	var g_pendown = $("#set_pen_down").val();
 	if (g_set_dry_run)	g_pendown = g_penup;
@@ -641,7 +668,8 @@ function render_gcode(){
 	if(g_set_home_x||g_set_home_y||g_set_home_y){
 		gcode_output+= "G28 "+(g_set_home_x?"X":"")+" "+(g_set_home_y?"Y":"")+" "+(g_set_home_z?"Z":"")+"\r\n";
 	}
-	gcode_output+= "G0 Z"+g_penup+" F"+g_travel_speed+"\r\n";	
+	if(g_set_manual_positioning)
+		gcode_output += addManualPositioning(g_set_manual_positioning_z, g_penup, g_travel_speed);
 	var lastpos = [];
 	var first_move = true;
 	gcode_output+= "G0 Z"+g_penup+" F"+g_travel_speed+"\r\n";
@@ -657,8 +685,35 @@ function render_gcode(){
 		first_move = false;
 	}
 	gcode_output+= "G0 Z"+g_penup+" F"+g_travel_speed+"\r\n";
+	if(g_set_manual_positioning)
+		gcode_output+= "G53 ;Restore Workspace\r\n";
 	gcode_output+= "G28 X\r\n";
 	download("3d_writer.gcode", gcode_output);
+
+}
+function addManualPositioning(ignore_z, pen_up, travel_speed) {
+	let gcode_init = ignore_z ? `G0 Z${pen_up} F${travel_speed} ;Move to offset setting height\r\n` : "";
+
+	const offset_all = "G92 X0 Y0 Z0 ;Workspace Offset\r\n";
+	const steppers_all = "M18 ;Disable Steppers\r\n";
+	let offset_xy = `G92 X0 Y0 Z${pen_up} ;Workspace Offset\r\n`;
+	const steppers_xy = "M18 X Y ;Disable X and Y Steppers (Z is fixed)\r\n";
+	
+	let chosen_offset = ignore_z ? offset_xy : offset_all;
+	let chosen_steppers = ignore_z ? steppers_xy : steppers_all;
+
+	let gcode = 
+	"G92.1 ;Clear previous offsets\r\n" +
+	gcode_init +
+	chosen_steppers +
+	"G4 P1000 ;Wait 1s to not have accidental double click\r\n" +
+	"M300 S440 P200 ;Beep\r\n" +
+	"M0 Set offset and click\r\n" +
+	"M17 ;Enable Steppers\r\n" +
+	"M428 ;Offset HERE\r\n" +
+	chosen_offset;
+
+	return gcode;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RENDER FUNCTIONS - END //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
