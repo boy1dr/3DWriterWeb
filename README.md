@@ -1,5 +1,5 @@
 # 3DWriterWeb
-
+## <a href="http://3dwriter.io">3DWriter.io</a>
 A web version of the 3DWriter project.
 
 Let your 3D Printer do your handwriting.
@@ -12,3 +12,5 @@ In XY-only mode, the gantry is fixed at *Pen Up* height during the offset setup.
 This mode is useful if you don't want the pen to touch the writing surface during the origin setup.
 
 **Printing multiple files:** if you plan to print multiple drawings consecutively (separate gcode files) you must either check *Home Z* or home Z axis manually before each print.
+
+2023-12-27 Reduced point precision to a more manageable 2 places. Restored project saving and loading.

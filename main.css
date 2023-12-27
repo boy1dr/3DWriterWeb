@@ -1,0 +1,323 @@
+html, body {
+			font-family:sans-serif;
+			width:100%;
+			height:100%;
+			background-color:#f1f1f1;
+		}
+		.footer{
+			position:fixed;
+			bottom:0px;
+			left:0px;
+			right:0px;
+			height:45px;
+			background-color:#333;
+			color:white;
+			text-align:center;
+			line-height:40px;
+		}
+		.navbar{
+			background-color:#333 !important;
+			color:white !important;
+		}
+		.navbar-brand {
+			color:white !important;
+		}
+		.nav-link{
+			color:white !important;
+		}
+		.dropdown-menu {
+			background-color:#333 !important;
+			color:white !important;
+		}
+		.dropdown-item{
+			color:white;
+		}
+		.accordion-toggle a:link{
+			text-decoration:none !important;
+		}
+		.panel-heading .accordion-toggle.collapsed:before {
+			font-family: "Font Awesome 5 Free";
+			font-style: normal;
+			font-weight:900;
+			content: "\f105";
+		}
+		.panel-heading .accordion-toggle:before {
+			font-family: "Font Awesome 5 Free";
+			font-style: normal;
+			font-weight:900;
+			content: "\f107";
+		}
+		.h4{
+		}
+		#harware_setup{
+			padding-left:15px;
+		}
+		.text_block{
+			padding:0px;
+			background-color:#e0e0e0;
+			margin-bottom:10px;
+		}
+		.tb_hdr{
+			font-size:10pt;
+			background-color:#ccc;color:white;
+			background-color:#717171;
+			font-weight:bold;
+		}
+		.tb_hdr td{
+			padding:2px;
+			text-align:left;
+			line-height:12px;
+		}
+		.tb_bdy td{
+			padding:2px;
+		}
+
+		.tb_bdy select{
+			font-size:11pt;
+		}
+		.tb_bdy select optgroup{
+			font-size:10pt;
+			font-style:normal;
+		}
+
+		.text_block input[type=text]{
+			padding:0px;
+		}
+		.text_block table{
+			width:100%;
+		}
+		.tb_clsr{
+			color:red;
+			font-size:14pt;
+			padding:4px;
+			cursor:pointer;
+		}
+		.btn-xs{
+			font-size: 8pt;
+			padding: 4px;
+			line-height: 10px;
+		}
+		#harware_setup table{
+			margin-bottom:8px;
+			border-bottom:1px solid #e0e0e0;
+			margin-left:15px;
+		}
+		#harware_setup table tr{
+		}
+		#harware_setup table td{
+			padding:2px;
+			padding-right:10px;
+		}
+		#harware_setup table td input[type=text]{
+			padding:0px;
+			font-size:10pt;
+		}
+		#harware_setup table label{
+			font-weight:600;
+			margin-bottom:0px;
+		}
+		.scale{
+			display:inline-block;
+			margin-left:60px;
+		}
+		.oob_text{
+			position:absolute; top:0px; left:20px; color:red;background-color:white;border:2px solid red;margin-top: -40px;padding:2px 10px 2px 10px;font-size:12pt;
+			display:none;
+		}
+		.canvas_div{
+			position:relative;
+			margin-bottom:60px;
+		}
+		.render_controls{
+			text-align:right;
+		}
+		.google-button{
+			background-color: #eee;
+			margin-left: 40px;
+			padding: 4px 8px 4px 8px;
+			line-height: 20px;
+			height: 28px;
+			margin-top: 10px;
+			border-radius:4px;
+			font-family:"Roboto", "Helvetica", "Arial", sans-serif;
+			font-size:14px;
+			border:0px;
+		}
+		.ui-avatar {
+			display:none;
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			box-shadow:
+			inset 0 0 0 2px rgba(255,255,255,0.6), 
+			0 1px 1px rgba(0,0,0,0.1);
+			background-color: transparent !important;
+			margin-left:20px;
+			z-index: 999;
+		}
+		.ui-avatar img {
+			border-radius: inherit;
+			width: inherit;
+			height: inherit;
+			display: block;
+			position: relative;
+			z-index: 998;
+		}
+		.nav-link{
+			margin-top:6px;
+		}
+		.navbar-brand{
+			margin-top:6px;
+		}
+		.modal-dialog{
+			max-width:850px;
+		}
+		@media only screen and (max-width: 1455px) {
+			.render_controls{
+				text-align:center;
+			}
+			.preview_controls{
+				text-align:center;
+			}
+			.canvas_div{
+				margin-top:15px;
+			}
+		}
+		.ui_x-axis{
+			position:absolute;
+			bottom:0px;
+			left:40px;
+			color:white;
+		}
+		.ui_y-axis{
+			position:absolute;
+			bottom:0px;
+			left:0px;
+			margin-left:-22px;
+			bottom:60px;
+			color:white;
+			transform: rotate(-90deg);
+		}
+		.ui_origin_x{
+			position:absolute;
+			bottom:0px;
+			left:0px;
+			width:150px;
+			height:20px;
+			background-color:#333;
+		}
+		.ui_origin_y{
+			position:absolute;
+			bottom:65px;
+			left:0px;
+			margin-left:-65px;
+			width:150px;
+			height:20px;
+			background-color:#333;
+			transform: rotate(-90deg);
+		}
+		.statcounter{
+			background-color: white;
+			padding: 0px 4px 0px 4px;
+			border-radius: 4px;
+		}
+		.adv_ctrl{
+			display:none;
+		}
+		.dib{
+			display:inline-block;
+		}
+		.dark{
+			background:#333;color:white;
+			}
+		.my_btn{
+			display:inline-block;
+			padding:5px 8px 5px 8px;
+			border:1px solid #bbb;
+			cursor:pointer;
+			box-shadow:2px 2px 3px #bbb;
+			background-color:#f2f2f2;
+		}
+		.my_btn:hover{
+			background-color:white;
+		}
+		.my_btn .content{
+			display:inline-block;
+			margin-left:8px;
+			
+		}
+		.light_borders{
+			border:1px solid #f2777a;	/* #b5b5b5 */
+		}
+		/* font edit start */
+		.font_edit_app {
+			display:none;
+		}
+		/* font edit end*/
+		.option_box{
+			display:none;
+			background-color:white;
+			border:1px solid #ccc;
+			position:absolute;
+			box-shadow:4px 4px 5px #eee;
+			padding:0px;
+		}
+		.option_box div{
+			cursor:pointer;
+			padding:4px 10px 4px 10px;
+			min-width:80px;
+		}
+		.option_box div:hover{
+			background-color:#e0e0e0;
+		}
+		.hf_div{
+			border:1px solid #e90e0e0;
+			margin-bottom:2px;
+			height:45px;
+			width:900px;
+			cursor:pointer;
+		}
+		.hf_div label{
+			cursor:pointer;
+		}
+		.hf_div:hover{
+			border-bottom:1px solid #e0e0e0;
+		}
+		.option_font{
+			display:none;
+			position:absolute;
+			top:0px;
+			bottom:50px;
+			left:50px;
+			width:950px;
+			background-color:white !important;
+			border:1px solid #ccc;
+			overflow-y:scroll;
+			box-shadow:4px 4px 5px #eee;
+			padding:0px;
+			
+		}
+		.option_font div:hover{
+			background-color:white;
+		}
+		.font_menu label{
+			width:100px;
+			padding-left:5px;
+			background-color:white;
+			font-size:12pt;
+			font-weight:500;
+		}
+		.font_menu_title{
+			display:block;
+			background-color:#333;
+			color:white;
+			font-weight:bold;
+			font-size:13pt;
+			padding:3px;
+		}
+		.bg_grad{
+			height:100%;
+			background: #FFEFBA;  /* fallback for old browsers */
+			background: -webkit-linear-gradient(to right, #FFFFFF, #FFEFBA);  /* Chrome 10-25, Safari 5.1-6 */
+			background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		}
